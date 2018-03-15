@@ -1,0 +1,32 @@
+<%= form_with(model: operator, local: true) do |form| %>
+  <% if operator.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(operator.errors.count, "error") %> prohibited this operator from being saved:</h2>
+
+      <ul>
+      <% operator.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :operator_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :drone_type %>
+    <%= form.text_field :drone_type, id: :operator_drone_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :scenario %>
+    <%= form.text_field :scenario, id: :operator_scenario %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

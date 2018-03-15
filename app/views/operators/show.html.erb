@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @operator.name %>
+</p>
+
+<p>
+  <strong>Drone type:</strong>
+  <%= @operator.drone_type %>
+</p>
+
+<p>
+  <strong>Scenario:</strong>
+  <%= @operator.scenario %>
+</p>
+
+<%= link_to 'Edit', edit_operator_path(@operator) %> |
+<%= link_to 'Back', operators_path %>
