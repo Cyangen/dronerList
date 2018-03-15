@@ -1,10 +1,36 @@
 class OperatorsController < ApplicationController
   before_action :set_operator, only: [:show, :edit, :update, :destroy]
 
+  require 'open-uri'
+
+
   # GET /operators
   # GET /operators.json
   def index
     @operators = Operator.all
+
+    doc = Nokogiri::HTML(open("http://moduliweb.enac.gov.it/applicazioni/SAPR/APR_ReportAutorizzazioniOperatori.asp"))
+
+    table = doc.at('table')
+
+    table.search('tr').each do |tr|
+      cells = tr.search('th, td')
+
+      # operators name
+      puts cells[3].text.strip.split(':')[0].gsub('pec','')
+
+      # operators pec
+      cells[3].text.strip.split(':')[1]
+
+      cells.each do |cell|
+        text = cell.text.strip
+
+        # puts text
+      end
+
+      # output cell data
+    end
+
   end
 
   # GET /operators/1
