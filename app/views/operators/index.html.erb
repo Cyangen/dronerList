@@ -35,17 +35,17 @@
       <div class="col s12 m6 l6">
         <div class="card horizontal">
           <div class="card-image">
-            <img style="width: 50px;height: 100px" src="/comp.png">
+            <img src="/comp.png">
           </div>
           <div class="card-stacked">
             <div class="card-content">
-              <p><b><%= operator.name %></b></p>
+              <p class="truncate"><b><%= operator.name %></b></p>
               <br>
               <% if operator.pec %>
                 <p>Contatto: <%= operator.pec %></p>
               <% else %>
-                 <p>Contatto: <a href="<%= operator.website %>">vai al sito web</a></p>
-              <% end %>
+                 <p>Contatto: <a href="<%= operator.website.include?('http://') ? operator.website : 'http://'+operator.website %>" target="_blank">vai al sito web</a></p>
+            <% end %>
             </div>
             <div class="card-action">
               <%= link_to 'Vai al profilo', operator %>

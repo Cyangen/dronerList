@@ -33,17 +33,14 @@
      <div class="col s12 m12 l12">
         <div class="card horizontal">
           <div class="card-image">
-            <img style="width: 50px;height: 100px" src="/comp.png">
+            <img src="/comp.png">
           </div>
           <div class="card-stacked">
             <div class="card-content">
               <p><b><%= @operator.name %></b></p>
               <br>
-              <% if @operator.pec %>
-                <p>Contatto: <%= @operator.pec %></p>
-                <br>
-              <% else %>
-                <p>Contatto: <a href="<%= @operator.website %>">vai al sito web</a></p>
+              <% if @operator.website %>
+                <p>Sito web: <%= @operator.website %></p>
                 <br>
               <% end %>
               <% if @operator.drone_type %>
@@ -51,7 +48,7 @@
                 <br>
               <% end %>
               <% if @operator.pec %>
-                <p>Pec: <%= @operator.pec %></p>
+                <p>Indirizzo mail: <%= @operator.pec %></p>
                 <br>
               <% end %>
               <% if @operator.phone %>
