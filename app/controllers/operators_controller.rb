@@ -14,89 +14,87 @@ class OperatorsController < ApplicationController
       @operators = Operator.take(20)
     end
 
-    # mechanize = Mechanize.new
-    # page_number = 1
-    #
-    # 23.times do
-    #   doc = Nokogiri::HTML(open("https://www.dronezine.it/database-operatori-droni-e-costruttori-uav/visualizzazione-database-operatori-professionali-droni-e-uav/?listpage=" + page_number.to_s))
-    #
-    #   table = doc.at('table')
-    #   table.search('tr').each do |tr|
-    #     cells = tr.search('th, td')
-    #     name = cells[0].text.strip
-    #     address = cells[1].text.strip + ' ' + cells[2].text.strip
-    #     info = cells[5].text.strip
-    #     website = cells[4].text.strip
-    #
-    #     Operator.create(name: name.downcase, infos:info.downcase, website:website.downcase, address:address.downcase)
-    #   end
-    #
-    #   page_number = page_number + 1
-    # end
-
-    # doc2 = Nokogiri::HTML(open("https://www.dronezine.it/piloti/"))
-    # table2 = doc2.at('table')
-    #
-    # table2.search('tr').each do |tr|
-    #   cells = tr.search('th, td')
-    #   name = cells[2].text.strip + cells[3].text.strip
-    #   address = cells[1].text.strip + ' ' + cells[0].text.strip
-    #   phone = cells[4].text.strip
-    #   pec = cells[5].text.strip
-    #
-    #   unless Operator.exists?(name: name)
-    #     Operator.create(name: name.downcase, pec: pec.downcase, phone:phone, address:address.downcase)
-    #   end
-    # end
-    #
-    # puts '0000000000000000000000000000000'
-    # puts Operator.count
-
-
   end
-  #
-  # def init
-  #   # enac sapr oprators
-  #   doc = Nokogiri::HTML(open("http://moduliweb.enac.gov.it/applicazioni/SAPR/APR_ReportAutorizzazioniOperatori.asp"))
-  #   table = doc.at('table')
-  #
-  #   table.search('tr').each do |tr|
-  #     cells = tr.search('th, td')
-  #
-  #     name = cells[3].text.strip.split(':')[0].gsub('pec','')
-  #     pec = cells[3].text.strip.split(':')[1]
-  #     weight = cells[8].text.strip
-  #     scenario = cells[9].text.strip
-  #     type = cells[4].text.strip
-  #
-  #     # get additional infos from registroimprese
-  #     mechanize = Mechanize.new
-  #     page = mechanize.get('http://www.registroimprese.it/home')
-  #     form = page.forms.first
-  #     form['_1_WAR_ricercaRIportlet_inputSearchField'] = name
-  #     page = form.submit
-  #     table = page.at('table')
-  #     tbody = table.at('tbody')
-  #
-  #     if tbody.search('tr')[0]
-  #       tr = tbody.search('tr')[0]
-  #       div = tr.search('div')[12]
-  #       address = div.search('span')[0].text
-  #     else
-  #       address = nil
-  #     end
-  #
-  #     # multiple drones for one operator
-  #     if Operator.exists?(name: name)
-  #       operator = Operator.find_by(name: name)
-  #       operator.drone_type = operator.drone_type + '/' + type
-  #       operator.save
-  #     else
-  #       Operator.create(name: name, pec: pec, weight:weight, scenario:scenario, drone_type:type, address:address).save
-  #     end
-  #
-  #   end
-  # end
+
+  def init
+    # enac sapr oprators
+    doc = Nokogiri::HTML(open("http://moduliweb.enac.gov.it/applicazioni/SAPR/APR_ReportAutorizzazioniOperatori.asp"))
+    table = doc.at('table')
+
+    table.search('tr').each do |tr|
+      cells = tr.search('th, td')
+
+      name = cells[3].text.strip.split(':')[0].gsub('pec','')
+      pec = cells[3].text.strip.split(':')[1]
+      weight = cells[8].text.strip
+      scenario = cells[9].text.strip
+      type = cells[4].text.strip
+
+      # get additional infos from registroimprese
+      mechanize = Mechanize.new
+      page = mechanize.get('http://www.registroimprese.it/home')
+      form = page.forms.first
+      form['_1_WAR_ricercaRIportlet_inputSearchField'] = name
+      page = form.submit
+      table = page.at('table')
+      tbody = table.at('tbody')
+
+      if tbody.search('tr')[0]
+        tr = tbody.search('tr')[0]
+        div = tr.search('div')[12]
+        address = div.search('span')[0].text
+      else
+        address = nil
+      end
+
+      # multiple drones for one operator
+      if Operator.exists?(name: name)
+        operator = Operator.find_by(name: name)
+        operator.drone_type = operator.drone_type + '/' + type
+        operator.save
+      else
+        Operator.create(name: name, pec: pec, weight:weight, scenario:scenario, drone_type:type, address:address).save
+      end
+
+    end
+  end
+
+  def start
+    mechanize = Mechanize.new
+    page_number = 1
+
+    23.times do
+      doc = Nokogiri::HTML(open("https://www.dronezine.it/database-operatori-droni-e-costruttori-uav/visualizzazione-database-operatori-professionali-droni-e-uav/?listpage=" + page_number.to_s))
+
+      table = doc.at('table')
+      table.search('tr').each do |tr|
+        cells = tr.search('th, td')
+        name = cells[0].text.strip
+        address = cells[1].text.strip + ' ' + cells[2].text.strip
+        info = cells[5].text.strip
+        website = cells[4].text.strip
+
+        Operator.create(name: name.downcase, infos:info.downcase, website:website.downcase, address:address.downcase)
+      end
+
+      page_number = page_number + 1
+    end
+
+    doc2 = Nokogiri::HTML(open("https://www.dronezine.it/piloti/"))
+    table2 = doc2.at('table')
+
+    table2.search('tr').each do |tr|
+      cells = tr.search('th, td')
+      name = cells[2].text.strip + cells[3].text.strip
+      address = cells[1].text.strip + ' ' + cells[0].text.strip
+      phone = cells[4].text.strip
+      pec = cells[5].text.strip
+
+      unless Operator.exists?(name: name)
+        Operator.create(name: name.downcase, pec: pec.downcase, phone:phone, address:address.downcase)
+      end
+    end
+  end
 
   # GET /operators/1
   # GET /operators/1.json

@@ -59,6 +59,10 @@
                 <p>Informazioni: <%= @operator.infos %></p>
                 <br>
               <% end %>
+              <% if @operator.address %>
+                <p>Luogo: <%= @operator.address %></p>
+                <br>
+              <% end %>
             </div>
             <div class="card-action">
             </div>
