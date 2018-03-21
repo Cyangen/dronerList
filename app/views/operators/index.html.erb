@@ -37,24 +37,26 @@
 <div class="container">
   <div class="row">
 
-    <% @operators.each do |operator| %>
-      <div class="col s12 m6 l6">
-        <div class="card horizontal">
-          <div class="card-image">
-            <img src="/comp.png">
-          </div>
-          <div class="card-stacked">
-            <div class="card-content">
-              <p class="truncate"><b><%= operator.name.upcase %></b></p>
-              <br>
-                <p><%= operator.address %></p>
+    <% if @operators %>
+      <% @operators.each do |operator| %>
+        <div class="col s12 m6 l6">
+          <div class="card horizontal">
+            <div class="card-image">
+              <img src="/comp.png">
             </div>
-            <div class="card-action">
-              <%= link_to 'Ottieni il contatto', operator %>
+            <div class="card-stacked">
+              <div class="card-content">
+                <p class="truncate"><b><%= operator.name.upcase %></b></p>
+                <br>
+                  <p><%= operator.address %></p>
+              </div>
+              <div class="card-action">
+                <%= link_to 'Ottieni il contatto', operator %>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
 
   </div>
