@@ -16,49 +16,6 @@ class OperatorsController < ApplicationController
 
   end
 
-  def init
-    # enac sapr oprators
-    doc = Nokogiri::HTML(open("http://moduliweb.enac.gov.it/applicazioni/SAPR/APR_ReportAutorizzazioniOperatori.asp"))
-    table = doc.at('table')
-
-    table.search('tr').each do |tr|
-      cells = tr.search('th, td')
-
-      name = cells[3].text.strip.split(':')[0].gsub('pec','')
-      pec = cells[3].text.strip.split(':')[1]
-      weight = cells[8].text.strip
-      scenario = cells[9].text.strip
-      type = cells[4].text.strip
-
-      # get additional infos from registroimprese
-      mechanize = Mechanize.new
-      page = mechanize.get('http://www.registroimprese.it/home')
-      form = page.forms.first
-      form['_1_WAR_ricercaRIportlet_inputSearchField'] = name
-      page = form.submit
-      table = page.at('table')
-      tbody = table.at('tbody')
-
-      if tbody.search('tr')[0]
-        tr = tbody.search('tr')[0]
-        div = tr.search('div')[12]
-        address = div.search('span')[0].text
-      else
-        address = nil
-      end
-
-      # multiple drones for one operator
-      if Operator.exists?(name: name)
-        operator = Operator.find_by(name: name)
-        operator.drone_type = operator.drone_type + '/' + type
-        operator.save
-      else
-        Operator.create(name: name, pec: pec, weight:weight, scenario:scenario, drone_type:type, address:address).save
-      end
-
-    end
-  end
-
   def start
     mechanize = Mechanize.new
     page_number = 1
