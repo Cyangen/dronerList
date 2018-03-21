@@ -11,14 +11,20 @@
 <div class="section no-pad-bot" id="index-banner">
   <div class="container">
     <br><br>
-    <h1 class="header center orange-text">Dronisti.it</h1>
+    <h1 class="header center orange-text">
+      <% if params[:operator] %>
+        Dronisti di <%= params[:operator].capitalize %>
+      <% else %>
+        Dronisti.it
+      <% end %>
+    </h1>
     <div class="row center">
       <h5 class="header col s12 light">Cerca fra centinaia di professionisti del settore</h5>
     </div>
     <div class="row center">
       <div class="input-field col s12">
         <%= form_tag(operators_path, method: :get) do %>
-          <%= text_field_tag :operator, params[:operator], class: 'validate center-align', placeholder:'Inserisci una città dove cercare il tuo dronista!' %>
+          <%= text_field_tag :operator, params[:operator], class: 'validate center-align search-input', placeholder:'Inserisci una città' %>
         <% end %>
         <!--<input id="first_name2" type="text" class="validate">-->
         <!--<label for="first_name2">inizia la tua ricerca qui!</label>-->
@@ -37,10 +43,10 @@
           </div>
           <div class="card-stacked">
             <div class="card-content">
-              <p><b><%= @operator.name %></b></p>
+              <p><b><%= @operator.name.upcase %></b></p>
               <br>
               <% if @operator.website %>
-                <p>Sito web: <%= @operator.website %></p>
+                <p>Sito web:  <a href="<%= @operator.website.include?('http://') ? @operator.website : 'http://'+@operator.website %>" target="_blank"><%= @operator.website %></a></p>
                 <br>
               <% end %>
               <% if @operator.drone_type %>

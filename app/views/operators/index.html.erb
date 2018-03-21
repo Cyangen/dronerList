@@ -1,5 +1,5 @@
 <nav class="light-blue lighten-1" role="navigation">
-  <div class="nav-wrapper container"><a id="logo-container" href="<%= operators_path %>" class="brand-logo">Logo</a>
+  <div class="nav-wrapper container"><a id="logo-container" href="<%= operators_path %>" class="brand-logo">Dronisti.it</a>
     <ul class="right hide-on-med-and-down">
     </ul>
 
@@ -11,14 +11,20 @@
 <div class="section no-pad-bot" id="index-banner">
   <div class="container">
     <br><br>
-    <h1 class="header center orange-text">Dronisti.it</h1>
+    <h1 class="header center orange-text">
+      <% if params[:operator] %>
+          Dronisti di <%= params[:operator].capitalize %>
+        <% else %>
+          Dronisti.it
+      <% end %>
+    </h1>
     <div class="row center">
       <h5 class="header col s12 light">Cerca fra centinaia di professionisti del settore</h5>
     </div>
     <div class="row center">
       <div class="input-field col s12">
         <%= form_tag(operators_path, method: :get) do %>
-          <%= text_field_tag :operator, params[:operator], class: 'validate center-align', placeholder:'Inserisci una città dove vuoi cercare il tuo dronista!' %>
+          <%= text_field_tag :operator, params[:operator], class: 'validate center-align search-input', placeholder:'Inserisci una città' %>
         <% end %>
         <!--<input id="first_name2" type="text" class="validate">-->
         <!--<label for="first_name2">inizia la tua ricerca qui!</label>-->
@@ -39,16 +45,12 @@
           </div>
           <div class="card-stacked">
             <div class="card-content">
-              <p class="truncate"><b><%= operator.name %></b></p>
+              <p class="truncate"><b><%= operator.name.upcase %></b></p>
               <br>
-              <% if operator.pec %>
-                <p>Contatto: <%= operator.pec %></p>
-              <% else %>
-                 <p>Contatto: <a href="<%= operator.website.include?('http://') ? operator.website : 'http://'+operator.website %>" target="_blank">vai al sito web</a></p>
-            <% end %>
+                <p><%= operator.address %></p>
             </div>
             <div class="card-action">
-              <%= link_to 'Vai al profilo', operator %>
+              <%= link_to 'Ottieni il contatto', operator %>
             </div>
           </div>
         </div>
@@ -66,15 +68,15 @@
         <h5 class="white-text">Company Bio</h5>
         <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
       </div>
-      <div class="col l3 s12">
-        <h5 class="white-text">Settings</h5>
-        <ul>
-          <li><a class="white-text" href="#!">Link 1</a></li>
-          <li><a class="white-text" href="#!">Link 2</a></li>
-          <li><a class="white-text" href="#!">Link 3</a></li>
-          <li><a class="white-text" href="#!">Link 4</a></li>
-        </ul>
-      </div>
+      <!--<div class="col l3 s12">-->
+        <!--<h5 class="white-text">Settings</h5>-->
+        <!--<ul>-->
+          <!--<li><a class="white-text" href="#!">Link 1</a></li>-->
+          <!--<li><a class="white-text" href="#!">Link 2</a></li>-->
+          <!--<li><a class="white-text" href="#!">Link 3</a></li>-->
+          <!--<li><a class="white-text" href="#!">Link 4</a></li>-->
+        <!--</ul>-->
+      <!--</div>-->
       <div class="col l3 s12">
         <h5 class="white-text">Connect</h5>
         <ul>
@@ -88,7 +90,7 @@
   </div>
   <div class="footer-copyright">
     <div class="container">
-      <!--Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>-->
+      Creato da <a class="orange-text text-lighten-3" href="https://www.linkedin.com/in/matteo-ratti-37479476/">Ratti Matteo</a> e <a class="orange-text text-lighten-3" href="https://www.linkedin.com/in/mironenkoigor/">Igor Mironenko</a> -- Tutti i diritti riservati - © copyright 2018/2028
     </div>
   </div>
 </footer>
